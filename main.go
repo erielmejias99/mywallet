@@ -1,40 +1,42 @@
 package main
 
 import (
-  _ "embed"
-  "github.com/wailsapp/wails"
-  "wallet/currency"
-  "wallet/database"
-    "wallet/transaction"
-    "wallet/util"
+    _ "embed"
+    "github.com/wailsapp/wails"
+    "os"
+    "wallet/currency"
+    "wallet/database"
 )
 
-func basic() string {
-  return "Hello World!"
-}
 
 func main() {
 
-  db := database.GetDB()
-  err := db.AutoMigrate( &currency.Currency{} )
-  err = db.AutoMigrate( &transaction.Reason{} )
-  err = db.AutoMigrate( &transaction.Transaction{} )
+    db := database.GetDB()
 
-  currencyRep := currency.NewRep( db )
+    if os.Getenv("MIGRATE" ) == "true"{
+        err := InitMigrations( db )
+        if err != nil{
+            panic("Error creating migrations" )
+        }
+    }
 
-  app := wails.CreateApp(&wails.AppConfig{
-   Width:  1024,
-   Height: 500,
-   Title:  "wallet",
-   Colour: "#131313",
-  })
+    if os.Getenv("RUNAPP") == "false"{
+        return
+    }
 
-  app.Bind(basic)
-  app.Bind(currencyRep)
-  app.Bind(util.Login)
+    app := wails.CreateApp(&wails.AppConfig{
+        Width:  1024,
+        Height: 500,
+        Title:  "wallet",
+        Colour: "#131313",
+    })
 
-  err = app.Run()
-  if err != nil{
-   panic("Error running application" )
-  }
+    currencyRep := currency.NewRep( db )
+
+    app.Bind(currencyRep)
+
+    err := app.Run()
+    if err != nil{
+        panic("Error running application" )
+    }
 }
