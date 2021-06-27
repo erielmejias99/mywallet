@@ -15,6 +15,7 @@ Vue.config.devtools = true;
 import Wails from '@wailsapp/runtime';
 import router from './router'
 import '@mdi/font/css/materialdesignicons.min.css'
+import store from './store'
 
 Wails.Init(() => {
 	new Vue({
@@ -25,6 +26,7 @@ Wails.Init(() => {
 		}),
 
         router,
+        store,
         render: h => h(App)
     }).$mount('#app');
 });

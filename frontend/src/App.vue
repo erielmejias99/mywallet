@@ -43,6 +43,14 @@
           { icon: 'mdi-bank-transfer', label: "Transaction", to: { name: "Transaction" } },
         ]
       }
+    },
+    async mounted(){
+      try{
+        const resp = await window.backend.CurrencyRep.GetAll()
+        this.$store.dispatch("updateCurrencies", resp );
+      }catch(error){
+        console.log( error );
+      }
     }
   }
 </script>
