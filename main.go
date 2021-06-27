@@ -5,6 +5,7 @@ import (
   "github.com/wailsapp/wails"
   "wallet/currency"
   "wallet/database"
+    "wallet/transaction"
     "wallet/util"
 )
 
@@ -16,12 +17,14 @@ func main() {
 
   db := database.GetDB()
   err := db.AutoMigrate( &currency.Currency{} )
+  err = db.AutoMigrate( &transaction.Reason{} )
+  err = db.AutoMigrate( &transaction.Transaction{} )
 
   currencyRep := currency.NewRep( db )
 
   app := wails.CreateApp(&wails.AppConfig{
    Width:  1024,
-   Height: 768,
+   Height: 500,
    Title:  "wallet",
    Colour: "#131313",
   })
