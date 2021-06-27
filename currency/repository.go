@@ -92,7 +92,7 @@ func ( cdto *  CurrencyRep )Update( map_currency map[string]interface{} ) error{
 	return nil
 }
 
-func ( cdto * CurrencyRep ) Delete(  map_currency map[string]interface{} ) error {
+func ( cdto * CurrencyRep )Delete(  map_currency map[string]interface{} ) error {
 
 	var currency Currency
 
