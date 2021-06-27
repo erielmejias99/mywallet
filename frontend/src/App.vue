@@ -28,9 +28,11 @@
       <router-view></router-view>
     </v-main>
 
-    <v-footer fixed>
-      Eriel Mejias
-      <v-icon>mdi-dashboard</v-icon>
+    <v-footer fixed class="justify-end">
+      <div class="text-right">
+        Mady with <v-icon color="red">mdi-heart</v-icon>
+        by <a href="https://erielmejias99.herokuapp.com" target="_blank">erielmejias99@gmail.com</a>
+      </div>
     </v-footer>
   </v-app>
 </template>

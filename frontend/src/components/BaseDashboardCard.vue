@@ -7,22 +7,27 @@
       @click="$emit( 'click' )"
   >
     <div class="d-flex justify-space-between pa-2">
-      <div class="mt-3">
+      <div class="mt-1">
         <h2 style="color: white">
           <slot name="content">
             <v-progress-circular color="white" indeterminate></v-progress-circular>
           </slot>
         </h2>
-        <span style="color: white" class="font-weight-bold">
+        <div style="color: white" class="font-weight-bold">
             <slot name="label">
                 {{ $t("Loading") }}..
             </slot>
-        </span>
+
+        </div>
       </div>
 
       <v-avatar size="80" tile color="transparent">
         <slot name="avatar"></slot>
       </v-avatar>
+    </div>
+    <div class="text-right pa-2">
+      <slot name="actions">
+      </slot>
     </div>
   </v-sheet>
 </template>
@@ -51,7 +56,7 @@ export default {
 }
 
 .dash-card:hover{
-  box-shadow: 0 0 20px #666666 !important;
+  box-shadow: 0 0 20px #999999 !important;
   transition: .5s all !important;
 }
 

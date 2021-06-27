@@ -14,6 +14,19 @@
     <template #label>
       <div>{{currency.name}}</div>
     </template>
+    <template #actions>
+      <v-btn x-small fab color="white" class="mx-1">
+        <v-icon small color="red">mdi-minus</v-icon>
+      </v-btn>
+
+      <v-btn x-small fab color="white" class="mx-1">
+        <v-icon small color="green">mdi-plus</v-icon>
+      </v-btn>
+
+      <v-btn x-small fab color="white" class="mx-1">
+        <v-icon small color="red">mdi-delete</v-icon>
+      </v-btn>
+    </template>
 
   </base-dashboard-card>
 </template>
