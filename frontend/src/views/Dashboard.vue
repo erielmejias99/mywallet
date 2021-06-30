@@ -10,6 +10,11 @@
       </template>
     </dashboard-divider>
     <currency-cards></currency-cards>
+    <v-row>
+      <v-col cols="12">
+        <transaction-table></transaction-table>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -17,8 +22,9 @@
 import CurrencyCards from "@/layout/CurrencyCards";
 import DashboardDivider from "@/components/DashboardDivider";
 import CreateCurrency from "@/components/CreateCurrency";
+import TransactionTable from "@/components/TransactionTable";
 export default {
   name: "Dashboard",
-  components: {CreateCurrency, DashboardDivider, CurrencyCards}
+  components: {TransactionTable, CreateCurrency, DashboardDivider, CurrencyCards}
 }
 </script>
