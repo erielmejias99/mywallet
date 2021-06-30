@@ -15,6 +15,24 @@ type TransactionController struct {
 	Db *gorm.DB
 }
 
+func (receiver TransactionController) List( currencyId int ) ( []models.Transaction, error)  {
+
+	var transactions []models.Transaction
+	var resp * gorm.DB
+
+	if currencyId != 0 {
+		resp = receiver.Db.Find( &transactions, currencyId )
+	}else{
+		resp = receiver.Db.Find( &transactions )
+	}
+
+	if resp.Error != nil{
+		return transactions, resp.Error
+	}
+
+	return transactions, nil
+}
+
 func (receiver TransactionController) Create(transaction map[string]interface{}) (models.Transaction, error) {
 	var newTransaction models.Transaction
 
