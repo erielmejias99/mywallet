@@ -48,7 +48,7 @@
     },
     async mounted(){
       try{
-        const resp = await window.backend.CurrencyRep.GetAll()
+        const resp = await window.backend.CurrencyController.GetAll()
         this.$store.dispatch("updateCurrencies", resp );
       }catch(error){
         console.log( error );

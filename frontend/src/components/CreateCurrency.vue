@@ -61,7 +61,7 @@ export default {
       this.loading = true;
       try{
         this.currency.usd_change = Number.parseFloat( this.currency.usd_change );
-        const resp = await window.backend.CurrencyRep.Create( this.currency );
+        const resp = await window.backend.CurrencyController.Create( this.currency );
         console.log( resp )
         this.$store.dispatch("addCurrency", this.currency );
         this.dialog = false;
