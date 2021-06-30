@@ -2,21 +2,20 @@ package main
 
 import (
 	"gorm.io/gorm"
-	"wallet/currency"
-	"wallet/transaction"
+	"wallet/models"
 )
 
 func InitMigrations(db * gorm.DB) error{
 	var err error
-	err = db.AutoMigrate( &currency.Currency{} )
+	err = db.AutoMigrate( &models.Currency{} )
 	if err != nil{
 		return err
 	}
-	err = db.AutoMigrate( &transaction.Reason{} )
+	err = db.AutoMigrate( &models.Reason{} )
 	if err != nil{
 		return err
 	}
-	err = db.AutoMigrate( &transaction.Transaction{} )
+	err = db.AutoMigrate( &models.Transaction{} )
 	if err != nil{
 		return err
 	}
