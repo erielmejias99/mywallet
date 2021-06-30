@@ -1,37 +1,22 @@
-package currency
+package controllers
 
 import (
 	"fmt"
+	"github.com/go-playground/validator"
 	"github.com/mitchellh/mapstructure"
 	"github.com/wailsapp/wails/runtime"
-	"github.com/go-playground/validator"
 	"gorm.io/gorm"
+	"wallet/models"
 )
 
-type CurrencyI interface {
-	GetAll() ([]Currency, error )
-	Create(  map[string]interface{} ) ( Currency, error )
-	Update(  map[string]interface{} ) error
-	Delete(  map[string]interface{} ) error
+type CurrencyController struct{
+	Db * gorm.DB
 }
 
-type CurrencyRep struct {
-	db * gorm.DB
-}
+func (cdto *CurrencyController)GetAll() ([]models.Currency, error)  {
 
-var currencyRep * CurrencyRep = nil
-
-func NewRep(db *gorm.DB) * CurrencyRep {
-	if currencyRep == nil{
-		currencyRep = &CurrencyRep{ db: db }
-	}
-	return currencyRep
-}
-
-func (cdto * CurrencyRep)GetAll() ([]Currency, error)  {
-
-	var currency []Currency
-	result := cdto.db.Find(&currency)
+	var currency []models.Currency
+	result := cdto.Db.Find(&currency)
 	if result.Error != nil{
 		logger := runtime.NewLog()
 		logger.New(fmt.Sprintf( "Error getting currency from DB: %s", result.Error.Error() ) )
@@ -40,9 +25,9 @@ func (cdto * CurrencyRep)GetAll() ([]Currency, error)  {
 	return currency, nil
 }
 
-func (cdto * CurrencyRep)Create( map_currency map[string]interface{} ) ( Currency, error ) {
+func (cdto *CurrencyController)Create( map_currency map[string]interface{} ) (models.Currency, error ) {
 
-	var currency Currency
+	var currency models.Currency
 
 	err := mapstructure.Decode( map_currency, &currency )
 	if err != nil{
@@ -57,7 +42,7 @@ func (cdto * CurrencyRep)Create( map_currency map[string]interface{} ) ( Currenc
 	}
 
 	//var currency []Currency
-	result := cdto.db.Create( &currency )
+	result := cdto.Db.Create( &currency )
 	if result.Error != nil{
 		logger := runtime.NewLog()
 		logger.New(fmt.Sprintf( "Error getting currency from DB: %s", result.Error.Error() ) )
@@ -66,9 +51,9 @@ func (cdto * CurrencyRep)Create( map_currency map[string]interface{} ) ( Currenc
 	return currency, nil
 }
 
-func ( cdto *  CurrencyRep )Update( map_currency map[string]interface{} ) error{
+func ( cdto *CurrencyController)Update( map_currency map[string]interface{} ) error{
 
-	var currency Currency
+	var currency models.Currency
 
 	err := mapstructure.Decode( map_currency, &currency )
 	if err != nil{
@@ -83,7 +68,7 @@ func ( cdto *  CurrencyRep )Update( map_currency map[string]interface{} ) error{
 	}
 
 	//var currency []Currency
-	result := cdto.db.Create( &currency )
+	result := cdto.Db.Create( &currency )
 	if result.Error != nil{
 		logger := runtime.NewLog()
 		logger.New(fmt.Sprintf( "Error getting currency from DB: %s", result.Error.Error() ) )
@@ -92,16 +77,16 @@ func ( cdto *  CurrencyRep )Update( map_currency map[string]interface{} ) error{
 	return nil
 }
 
-func ( cdto * CurrencyRep )Delete(  map_currency map[string]interface{} ) error {
+func ( cdto *CurrencyController)Delete(  map_currency map[string]interface{} ) error {
 
-	var currency Currency
+	var currency models.Currency
 
 	err := mapstructure.Decode( map_currency, &currency )
 	if err != nil{
 		return err
 	}
 
-	result := cdto.db.Delete( &currency )
+	result := cdto.Db.Delete( &currency )
 	if result.Error != nil{
 		logger := runtime.NewLog()
 		logger.New(fmt.Sprintf( "Error deleting currency in DB: %s", result.Error.Error() ) )

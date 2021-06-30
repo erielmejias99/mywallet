@@ -1,4 +1,4 @@
-package transaction
+package controllers
 
 import (
 	"errors"
@@ -8,27 +8,15 @@ import (
 	"github.com/wailsapp/wails/runtime"
 	"gorm.io/gorm"
 	"math"
-	"wallet/currency"
+	"wallet/models"
 )
 
-type TransactionI interface {
-	Create( map[string]interface{} ) (Transaction, error)
+type TransactionController struct {
+	Db *gorm.DB
 }
 
-type TransactionRep struct {
-	db * gorm.DB
-}
-
-var transactionRep * TransactionRep = nil
-func GetTransactionRep( db * gorm.DB) *TransactionRep{
-	if transactionRep == nil{
-		transactionRep = &TransactionRep{ db: db }
-	}
-	return transactionRep
-}
-
-func (receiver TransactionRep) Create(transaction map[string]interface{}) (Transaction, error) {
-	var newTransaction Transaction
+func (receiver TransactionController) Create(transaction map[string]interface{}) (models.Transaction, error) {
+	var newTransaction models.Transaction
 
 	// Decode javaScript object
 	err := mapstructure.Decode( transaction, &newTransaction )
@@ -44,15 +32,15 @@ func (receiver TransactionRep) Create(transaction map[string]interface{}) (Trans
 	}
 
 	// Save Model in DataBase
-	result := receiver.db.Create( &newTransaction )
+	result := receiver.Db.Create( &newTransaction )
 	if result.Error != nil {
 		logger := runtime.NewLog()
 		logger.New(fmt.Sprintf( "Error getting currency from DB: %s", result.Error.Error() ) )
 		return newTransaction, result.Error
 	}
 
-	var currencyWallet currency.Currency
-	resp := receiver.db.Find( &currencyWallet, newTransaction.CurrencyID )
+	var currencyWallet models.Currency
+	resp := receiver.Db.Find( &currencyWallet, newTransaction.CurrencyID )
 	if resp.Error != nil{
 		return newTransaction, resp.Error
 	}
@@ -73,7 +61,7 @@ func (receiver TransactionRep) Create(transaction map[string]interface{}) (Trans
 		return newTransaction,err
 	}
 
-	resp = reasonRepository.db.Update( "balance", currencyWallet )
+	resp = receiver.Db.Update( "balance", currencyWallet )
 	if resp.Error != nil {
 		return newTransaction,resp.Error
 	}

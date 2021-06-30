@@ -1,8 +1,8 @@
-package currency
+package models
 
 import (
 	"gorm.io/gorm"
-	"wallet/transaction"
+	"wallet/models/transaction"
 )
 
 type Currency struct{
