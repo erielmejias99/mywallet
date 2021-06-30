@@ -1,10 +1,10 @@
 package main
 
 import (
-    _ "embed"
-    "github.com/wailsapp/wails"
-    "os"
-    "wallet/currency"
+	_ "embed"
+	"github.com/wailsapp/wails"
+	"os"
+    "wallet/controllers"
     "wallet/database"
 )
 
@@ -31,9 +31,13 @@ func main() {
         Colour: "#131313",
     })
 
-    currencyRep := currency.NewRep( db )
+    currencyController := controllers.CurrencyController{Db: db}
+    transactionController := controllers.TransactionController{Db: db}
+    reasonController := controllers.ReasonController{Db: db}
 
-    app.Bind(currencyRep)
+    app.Bind(&currencyController)
+    app.Bind(&transactionController)
+    app.Bind(&reasonController)
 
     err := app.Run()
     if err != nil{
