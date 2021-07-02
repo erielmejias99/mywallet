@@ -50,9 +50,11 @@
           placeholder="Short Description"
           v-model="transaction.description"
           >
-
           </v-textarea>
 
+          <v-alert v-if="err"  color="error">
+            {{err}}
+          </v-alert>
 
         </v-form>
       </v-card-text>
@@ -77,6 +79,7 @@ export default {
   data:()=>({
     dialog: false,
     loading: false,
+    err: null,
     transaction:{
       amount: null,
       reason: '',
@@ -98,22 +101,23 @@ export default {
       try{
         let transaction = {
           currency_id: this.currency.ID,
-          amount: parseInt( this.amount * 100 ),
-          reason: this.reason,
-          description: this.description
+          amount: parseInt( parseFloat( this.transaction.amount ) * 100 ),
+          reason: this.transaction.reason,
+          description: this.transaction.description
         }
         if( this.negative ){
           transaction.amount = -Math.abs( transaction.amount )
         }else{
           transaction.amount = Math.abs( transaction.amount )
         }
-        console.log( )
-        const resp = await alert( transaction );
+        const resp = await confirm( "Create: " + JSON.stringify(transaction) );
         if( resp ){
-          await window.backend.TransactionController.Create( transaction)
+          this.$store.dispatch('log', "Try Create Transaction: " + JSON.stringify(transaction) );
+          await window.backend.TransactionController.Create( transaction )
         }
       }catch( error ){
         this.err = error;
+        this.$store.dispatch('log', "Create Transaction Error: " + error );
       }finally {
         this.loading = false;
       }
