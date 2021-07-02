@@ -12,12 +12,14 @@
           <v-text-field
           v-model="currency.name"
           maxlength="5"
+          placeholder="Name"
           type="text"
           />
 
           <v-text-field
           v-model="currency.usd_change"
           maxlength="5"
+          placeholder="change"
           type="number"
           />
 
@@ -29,11 +31,11 @@
 
       </v-card-text>
       <v-card-actions class="justify-end">
-        <v-btn color="orange" @click="save" :loading="loading">
+        <v-btn color="orange" @click="save" :loading="loading" :disabled="loading">
           Save
         </v-btn>
 
-        <v-btn class="ml-2 white gray--tex" shaped @click="dialog=false" :loading="loading">
+        <v-btn class="ml-2 white gray--tex" shaped @click="dialog=false">
           Cancel
         </v-btn>
       </v-card-actions>
