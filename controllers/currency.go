@@ -77,17 +77,11 @@ func ( cdto *CurrencyController)Update( map_currency map[string]interface{} ) er
 	return nil
 }
 
-func ( cdto *CurrencyController)Delete(  map_currency map[string]interface{} ) error {
+func ( cdto *CurrencyController)Delete(  id int ) error {
 
-	var currency models.Currency
 
-	err := mapstructure.Decode( map_currency, &currency )
-	if err != nil{
-		return err
-	}
-
-	result := cdto.Db.Delete( &currency )
-	if result.Error != nil{
+	result := cdto.Db.Delete( &models.Currency{}, "id=?", id )
+	if result.Error != nil || result.RowsAffected == 0{
 		logger := runtime.NewLog()
 		logger.New(fmt.Sprintf( "Error deleting currency in DB: %s", result.Error.Error() ) )
 		return result.Error
