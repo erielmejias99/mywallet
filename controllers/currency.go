@@ -79,7 +79,6 @@ func ( cdto *CurrencyController)Update( map_currency map[string]interface{} ) er
 
 func ( cdto *CurrencyController)Delete(  id int ) error {
 
-
 	result := cdto.Db.Delete( &models.Currency{}, "id=?", id )
 	if result.Error != nil || result.RowsAffected == 0{
 		logger := runtime.NewLog()
