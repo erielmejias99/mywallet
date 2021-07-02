@@ -13,12 +13,12 @@
             <v-progress-circular color="white" indeterminate></v-progress-circular>
           </slot>
         </h2>
-        <div style="color: white" class="font-weight-bold">
-            <slot name="label">
-                {{ $t("Loading") }}..
-            </slot>
+<!--        <div style="color: white" class="font-weight-bold">-->
+<!--            <slot name="label">-->
+<!--                Loading...-->
+<!--            </slot>-->
 
-        </div>
+<!--        </div>-->
       </div>
 
       <v-avatar size="80" tile color="transparent">
