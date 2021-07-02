@@ -12,6 +12,13 @@
       </div>
     </template>
 
+    <template #item.CreatedAt="{item}">
+      <div>
+        {{ ( new Date(item.CreatedAt) ).toLocaleDateString() }}<br>
+        {{ ( new Date(item.CreatedAt) ).toLocaleTimeString() }}<br>
+      </div>
+    </template>
+
   </v-data-table>
 </template>
 
