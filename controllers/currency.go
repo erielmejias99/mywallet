@@ -60,15 +60,8 @@ func ( cdto *CurrencyController)Update( map_currency map[string]interface{} ) er
 		return err
 	}
 
-	val := validator.New()
-
-	err = val.Struct( currency )
-	if err != nil{
-		return err
-	}
-
 	//var currency []Currency
-	result := cdto.Db.Create( &currency )
+	result := cdto.Db.Save( &currency )
 	if result.Error != nil{
 		logger := runtime.NewLog()
 		logger.New(fmt.Sprintf( "Error getting currency from DB: %s", result.Error.Error() ) )
