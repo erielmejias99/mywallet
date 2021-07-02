@@ -19,9 +19,9 @@ export default {
   data: function(){
     return{
       card_design: [
-          { first: "purple", second: 'darkblue', icon: 'mdi-currency-usd' },
+          { first: "purple", second: 'darkblue', icon: 'mdi-cash' },
           { first: "orange", second: 'red', icon: 'mdi-currency-usd' },
-          { first: "blue", second: 'darkblue', icon: 'mdi-currency-usd' },
+          { first: "blue", second: 'darkblue', icon: 'mdi-bitcoin' },
           { first: "orange", second: 'blue', icon: 'mdi-currency-usd' },
           { first: "orange", second: 'blue', icon: 'mdi-currency-usd' },
           { first: "orange", second: 'blue', icon: 'mdi-currency-usd' },

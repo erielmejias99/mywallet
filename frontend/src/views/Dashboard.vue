@@ -15,6 +15,9 @@
         <transaction-table></transaction-table>
       </v-col>
     </v-row>
+    <v-row>
+      {{$store.getters.getCurrencies}}
+    </v-row>
   </v-container>
 </template>
 
