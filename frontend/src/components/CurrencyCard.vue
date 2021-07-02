@@ -1,30 +1,42 @@
 <template>
   <base-dashboard-card :color1="color1" :color2="color2">
     <template #avatar>
-      <v-icon color="white" size="40">{{icon}}</v-icon>
+      <span class="title white--text">
+        <b>
+          {{currency.name.toUpperCase()}}
+        </b>
+      </span>
+<!--      <v-icon color="white" size="40">{{icon}}</v-icon>-->
     </template>
 
     <template #content>
       <v-card-title>{{currency.balance}}</v-card-title>
-      <v-card-subtitle v-if="currency.balance > 0 && currency.usd_change && currency.name !== 'USD'">
-        ~{{currency.balance * currency.usd_change}}
+      <v-card-subtitle>
+
+        <template v-if="currency.balance > 0 && currency.usd_change && currency.name !== 'USD'">
+        &eqsim; <b>{{parseFloat( currency.balance * currency.usd_change ).toFixed(2)}}</b> USD
+        </template>
+        <template v-else>
+          &nbsp;
+        </template>
+
       </v-card-subtitle>
     </template>
-
-    <template #label>
-      <div>{{currency.name}}</div>
-    </template>
     <template #actions>
-      <v-btn x-small fab color="white" class="mx-1">
-        <v-icon small color="red">mdi-minus</v-icon>
-      </v-btn>
+      <create-transaction :currency="currency" negative >
+        <v-btn x-small fab color="white" class="mx-1">
+          <v-icon small color="red">mdi-minus</v-icon>
+        </v-btn>
+      </create-transaction>
+
+      <create-transaction :currency="currency" :negative="false">
+        <v-btn x-small fab color="white" class="mx-1">
+          <v-icon small color="green">mdi-plus</v-icon>
+        </v-btn>
+      </create-transaction>
 
       <v-btn x-small fab color="white" class="mx-1">
-        <v-icon small color="green">mdi-plus</v-icon>
-      </v-btn>
-
-      <v-btn x-small fab color="white" class="mx-1">
-        <v-icon small color="red">mdi-delete</v-icon>
+        <v-icon small @click="deleteCurrency( currency )" color="red">mdi-delete</v-icon>
       </v-btn>
     </template>
 
@@ -33,9 +45,10 @@
 
 <script>
 import BaseDashboardCard from "@/components/BaseDashboardCard";
+import CreateTransaction from "@/components/CreateTransaction";
 export default {
   name: "CurrencyCard",
-  components: {BaseDashboardCard},
+  components: {CreateTransaction, BaseDashboardCard},
   props:{
     icon: {
       type: String,
@@ -52,6 +65,19 @@ export default {
     currency: {
       type: Object,
       required: true
+    }
+  },
+  methods:{
+    deleteCurrency: async function(currency){
+      const resp = await confirm("Are you sure? Currency " + currency.name + " will be deleted and all its transactions");
+      if( resp ){
+        try{
+          await window.backend.CurrencyController.Delete( currency.ID );
+          this.$store.dispatch( 'removeCurrency', currency );
+        }catch (err){
+          alert( err );
+        }
+      }
     }
   }
 }
