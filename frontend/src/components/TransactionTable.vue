@@ -31,6 +31,8 @@
       <v-chip-group>
         <v-chip
         color="purple"
+        pill
+        class="white--text"
         v-for="currency of $store.getters.getCurrencies"
         :key="currency.ID"
         @click="search=currency.name"
@@ -67,19 +69,16 @@
       </template>
 
       <template #item.CreatedAt="{item}">
-        <v-menu open-on-hover close-on-click :close-on-content-click="false" >
+        <v-menu max-width="290" min-width="275" open-on-hover close-on-click :close-on-content-click="false" >
           <template #activator="{on}">
             <div v-on="on">
-              {{ ( new Date(item.CreatedAt) ).toLocaleDateString().replaceAll('/', '-') }}<br>
-              {{ ( new Date(item.CreatedAt) ).toLocaleTimeString() }}<br>
-              {{item.CreatedAt}}
+              {{ ( new Date(item.CreatedAt) ).toLocaleDateString().replaceAll('/', '-') }} <b>-</b>
+              {{ ( new Date(item.CreatedAt) ).toLocaleTimeString() }}
             </div>
           </template>
           <template #default>
             <v-date-picker
             :value="getGeneralDate(item.CreatedAt)"
-            locale="es-es"
-            locale-first-day-of-year="0"
             readonly
             >
             </v-date-picker>

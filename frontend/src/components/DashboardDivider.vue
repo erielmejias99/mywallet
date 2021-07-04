@@ -2,7 +2,7 @@
   <div>
     <v-toolbar dense flat>
 
-      <v-icon v-if="icon && icon.length" :color="icon_color">
+      <v-icon v-if="icon && icon.length" :color="icon_color" size="30px">
         {{icon}}
       </v-icon>
 

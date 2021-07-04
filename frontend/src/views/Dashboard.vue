@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <dashboard-divider title="Wallets" icon="mdi-wallet-outline">
+    <dashboard-divider title="Wallets" icon="mdi-wallet-outline" icon_color="orange">
       <template #actions>
         <create-currency>
           <v-btn icon color="orange">

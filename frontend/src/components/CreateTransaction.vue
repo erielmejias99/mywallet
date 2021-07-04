@@ -40,7 +40,7 @@
           <v-text-field
           placeholder="Reason"
           v-model="transaction.reason"
-          v-counter="50"
+          :counter="50"
           maxlength="100"
           prepend-inner-icon="mdi-account-question-outline"
           >
