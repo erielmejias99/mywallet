@@ -11,10 +11,6 @@ func InitMigrations(db * gorm.DB) error{
 	if err != nil{
 		return err
 	}
-	err = db.AutoMigrate( &models.Reason{} )
-	if err != nil{
-		return err
-	}
 	err = db.AutoMigrate( &models.Transaction{} )
 	if err != nil{
 		return err
