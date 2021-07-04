@@ -114,10 +114,13 @@ export default {
         if( resp ){
           this.$store.dispatch('log', "Try Create Transaction: " + JSON.stringify(transaction) );
           await window.backend.TransactionController.Create( transaction )
+          this.dialog = false;
+          this.$store.dispatch('log', "Transaction Created." + JSON.stringify(transaction) );
+          this.$store.dispatch( 'updateBalance', transaction )
         }
       }catch( error ){
         this.err = error;
-        this.$store.dispatch('log', "Create Transaction Error: " + error );
+        await this.$store.dispatch('log', "Create Transaction Error: " + error );
       }finally {
         this.loading = false;
       }
