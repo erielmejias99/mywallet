@@ -21,9 +21,9 @@ func (receiver TransactionController) List( currencyId int ) ( []models.Transact
 	var resp * gorm.DB
 
 	if currencyId != 0 {
-		resp = receiver.Db.Order( "created_at" ).Find( &transactions, currencyId )
+		resp = receiver.Db.Order( "created_at desc" ).Find( &transactions, currencyId )
 	}else{
-		resp = receiver.Db.Order( "created_at" ).Find( &transactions )
+		resp = receiver.Db.Order( "created_at desc" ).Find( &transactions )
 	}
 
 	if resp.Error != nil{
@@ -65,7 +65,7 @@ func (receiver TransactionController) Create(transaction map[string]interface{})
 
 	// Check if the amount of the transaction is negative and there is such amount.
 	if newTransaction.Amount < 0{
-		if currencyWallet.Balance >= int(math.Abs( float64( newTransaction.Amount ) )) {
+		if currencyWallet.Balance < int(math.Abs( float64( newTransaction.Amount ) )) {
 			return newTransaction, errors.New("not enough balance available")
 		}
 	}
