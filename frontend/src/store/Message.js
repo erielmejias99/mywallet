@@ -5,6 +5,9 @@ export default {
     },
     mutations:{
         ADD_LOG: function ( state, payload ) {
+            if( state.logs.length > 6 ){
+                state.logs = []
+            }
             state.logs.push( payload );
         },
         CLEAR_LOGS: function (state){
