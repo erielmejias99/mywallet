@@ -66,7 +66,14 @@ export default {
         const resp = await window.backend.CurrencyController.Create( this.currency );
         console.log( resp )
         this.currency.CreatedAt = new Date()
-        this.$store.dispatch("addCurrency", this.currency );
+
+        this.$store.dispatch("addCurrency",{
+          ID: this.currency.ID,
+          name: this.currency.name,
+          balance: this.currency.balance,
+          usd_change: this.usd_change,
+          CreatedAt: new Date(),
+        });
         this.dialog = false;
       }catch (err){
         console.log( err );
