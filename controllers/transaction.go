@@ -21,9 +21,9 @@ func (receiver TransactionController) List( currencyId int ) ( []models.Transact
 	var resp * gorm.DB
 
 	if currencyId != 0 {
-		resp = receiver.Db.Find( &transactions, currencyId )
+		resp = receiver.Db.Order( "created_at" ).Find( &transactions, currencyId )
 	}else{
-		resp = receiver.Db.Find( &transactions )
+		resp = receiver.Db.Order( "created_at" ).Find( &transactions )
 	}
 
 	if resp.Error != nil{
