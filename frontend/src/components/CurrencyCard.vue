@@ -17,7 +17,7 @@
         &eqsim; <b>{{parseFloat( currency.balance * currency.usd_change ).toFixed(2)}}</b> USD
         </template>
         <template v-else>
-          &nbsp;
+          &nbsp;None
         </template>
 
       </v-card-subtitle>
@@ -29,7 +29,7 @@
         </v-btn>
       </create-transaction>
 
-      <create-transaction :currency="currency" :negative="false">
+      <create-transaction :currency="currency" :negative="false" @created="createdTransaction">
         <v-btn x-small fab color="white" class="mx-1">
           <v-icon small color="green">mdi-plus</v-icon>
         </v-btn>
@@ -38,6 +38,13 @@
       <v-btn x-small fab color="white" class="mx-1">
         <v-icon small @click="deleteCurrency( currency )" color="red">mdi-delete</v-icon>
       </v-btn>
+
+      <edit-currency :currency.sync="currency">
+        <v-btn x-small fab color="white" class="mx-1">
+          <v-icon small color="primary">mdi-pen</v-icon>
+        </v-btn>
+      </edit-currency>
+
     </template>
 
   </base-dashboard-card>
@@ -46,9 +53,10 @@
 <script>
 import BaseDashboardCard from "@/components/BaseDashboardCard";
 import CreateTransaction from "@/components/CreateTransaction";
+import EditCurrency from "@/components/EditCurrency";
 export default {
   name: "CurrencyCard",
-  components: {CreateTransaction, BaseDashboardCard},
+  components: {EditCurrency, CreateTransaction, BaseDashboardCard},
   props:{
     icon: {
       type: String,
@@ -68,12 +76,18 @@ export default {
     }
   },
   methods:{
+    createdTransaction: function(trans){
+      console.log( "createdTransaction");
+      console.log( trans );
+      this.$emit( 'newTransaction', trans)
+    },
     deleteCurrency: async function(currency){
       const resp = await confirm("Are you sure? Currency " + currency.name + " will be deleted and all its transactions");
       if( resp ){
         try{
+          console.log( currency );
           await window.backend.CurrencyController.Delete( currency.ID );
-          this.$store.dispatch( 'removeCurrency', currency );
+          this.$emit( 'deleted', currency );
         }catch (err){
           alert( err );
         }

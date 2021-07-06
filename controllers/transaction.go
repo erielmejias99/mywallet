@@ -73,7 +73,7 @@ func (receiver TransactionController) Create(transaction map[string]interface{})
 	// Update the currency balance
 	currencyWallet.Balance += newTransaction.Amount
 
-	resp = receiver.Db.Save(  &currencyWallet )
+	resp = receiver.Db.Updates(  &currencyWallet )
 	if resp.Error != nil {
 		return newTransaction,resp.Error
 	}

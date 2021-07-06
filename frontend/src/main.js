@@ -13,20 +13,17 @@ Vue.config.productionTip = false;
 Vue.config.devtools = true;
 
 import Wails from '@wailsapp/runtime';
-import router from './router'
-import '@mdi/font/css/materialdesignicons.min.css'
-import store from './store'
 
 Wails.Init(() => {
 	new Vue({
-        vuetify: new Vuetify({
+		vuetify: new Vuetify({
 			icons: {
 				iconfont: 'mdi'
 			},
+			theme: {
+				dark: false
+			}
 		}),
-
-        router,
-        store,
-        render: h => h(App)
-    }).$mount('#app');
+		render: h => h(App)
+	}).$mount('#app');
 });

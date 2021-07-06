@@ -6,23 +6,15 @@
       </span>
     </template>
     <v-card>
-      <v-card-title>Add Currency</v-card-title>
+      <v-card-title>Edit USDChange</v-card-title>
       <v-card-text>
         <v-form>
           <v-text-field
-          v-model="currency.name"
-          maxlength="5"
-          placeholder="Name"
-          type="text"
-          />
-
-          <v-text-field
           v-model="currency.usd_change"
           maxlength="5"
-          placeholder="change"
+          placeholder="USD Change"
           type="number"
           />
-
         </v-form>
 
         <v-alert v-if="errors"  color="error">
@@ -45,34 +37,26 @@
 
 <script>
 export default {
-  name: "CreateCurrency",
+  name: "EditCurrency",
   data: function(){
     return{
       dialog: false,
       loading: false,
-      currency: {
-        name: "",
-        balance: 0,
-        usd_change: 0
-      },
       errors: null
+    }
+  },
+  props:{
+    currency: {
+      type: Object,
+      required: true
     }
   },
   methods:{
     save: async function (){
       this.loading = true;
       try{
-        this.currency.usd_change = Number.parseFloat( this.currency.usd_change );
-        await window.backend.CurrencyController.Create( this.currency );
-        this.currency.CreatedAt = new Date()
-
-        this.$emit("created",{
-          ID: this.currency.ID,
-          name: this.currency.name,
-          balance: this.currency.balance,
-          usd_change: this.usd_change,
-          CreatedAt: new Date(),
-        });
+        await window.backend.CurrencyController.Update( this.currency.ID, parseFloat(this.currency.usd_change)  );
+        this.$emit("input",this.currency );
         this.dialog = false;
       }catch (err){
         console.log( err );

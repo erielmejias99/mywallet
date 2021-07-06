@@ -1,18 +1,9 @@
 <template>
   <v-container>
-    <dashboard-divider title="Wallets" icon="mdi-wallet-outline" icon_color="orange">
-      <template #actions>
-        <create-currency>
-          <v-btn icon color="orange">
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </create-currency>
-      </template>
-    </dashboard-divider>
-    <currency-cards></currency-cards>
+    <currency-cards @transaction_created="addTransToTable" ></currency-cards>
     <v-row>
       <v-col cols="12">
-        <transaction-table></transaction-table>
+        <transaction-table ref="trans"></transaction-table>
       </v-col>
     </v-row>
   </v-container>
@@ -20,11 +11,17 @@
 
 <script>
 import CurrencyCards from "@/layout/CurrencyCards";
-import DashboardDivider from "@/components/DashboardDivider";
-import CreateCurrency from "@/components/CreateCurrency";
 import TransactionTable from "@/components/TransactionTable";
+
 export default {
   name: "Dashboard",
-  components: {TransactionTable, CreateCurrency, DashboardDivider, CurrencyCards}
+  components: { CurrencyCards, TransactionTable },
+  methods:{
+    addTransToTable: function( trans ){
+      console.log( 'here' );
+      console.log( trans );
+      this.$refs.trans.addTransaction( trans );
+    }
+  }
 }
 </script>

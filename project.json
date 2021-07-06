@@ -2,8 +2,8 @@
  "name": "wallet",
  "description": "Enter your project description",
  "author": {
-  "name": "",
-  "email": ""
+  "name": "wallet",
+  "email": "erielmejias99@gmail.com"
  },
  "version": "0.1.0",
  "binaryname": "wallet",

@@ -112,15 +112,20 @@ export default {
         }
         const resp = await confirm( "Create: " + JSON.stringify(transaction) );
         if( resp ){
-          this.$store.dispatch('log', "Try Create Transaction: " + JSON.stringify(transaction) );
-          await window.backend.TransactionController.Create( transaction )
+          await window.backend.TransactionController.Create( transaction );
+          console.log( 'emit-created' );
+          this.$emit( 'created', {
+            ID: 'New',
+            amount: transaction.amount,
+            reason: transaction.reason,
+            description: transaction.description,
+            currency_id: this.currency.ID,
+            CreatedAt: ( new Date() ).toISOString()
+          })
           this.dialog = false;
-          this.$store.dispatch('log', "Transaction Created." + JSON.stringify(transaction) );
-          this.$store.dispatch( 'updateBalance', transaction )
         }
       }catch( error ){
         this.err = error;
-        await this.$store.dispatch('log', "Create Transaction Error: " + error );
       }finally {
         this.loading = false;
       }

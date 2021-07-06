@@ -51,22 +51,15 @@ func (cdto *CurrencyController)Create( map_currency map[string]interface{} ) (mo
 	return currency, nil
 }
 
-func ( cdto *CurrencyController)Update( map_currency map[string]interface{} ) error{
+func ( cdto *CurrencyController)Update( id int, new_usd_change float64 ) error{
 
-	var currency models.Currency
-
-	err := mapstructure.Decode( map_currency, &currency )
-	if err != nil{
-		return err
-	}
-
-	//var currency []Currency
-	result := cdto.Db.Save( &currency )
+	result := cdto.Db.Model( &models.Currency{} ).Where("id=?",id ).Update("usd_change", new_usd_change );
 	if result.Error != nil{
 		logger := runtime.NewLog()
 		logger.New(fmt.Sprintf( "Error getting currency from DB: %s", result.Error.Error() ) )
 		return result.Error
 	}
+
 	return nil
 }
 

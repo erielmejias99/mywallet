@@ -1,12 +1,16 @@
 package main
 
 import (
-	_ "embed"
-	"github.com/wailsapp/wails"
-	"os"
-    "wallet/controllers"
-    "wallet/database"
+  _ "embed"
+  "github.com/wailsapp/wails"
+  "os"
+  "wallet/controllers"
+  "wallet/database"
 )
+
+func basic() string {
+  return "Hello World!"
+}
 
 //go:embed frontend/dist/app.js
 var js string
@@ -16,37 +20,44 @@ var css string
 
 func main() {
 
-    db := database.GetDB()
 
-    //if os.Getenv("MIGRATE" ) == "true"{
-    err := InitMigrations( db )
-    if err != nil{
-        panic("Error creating migrations" )
-    }
-    //}
+  db := database.GetDB()
 
-    if os.Getenv("RUNAPP") == "false"{
-        return
-    }
+  //if os.Getenv("MIGRATE" ) == "true"{
+  err := InitMigrations( db )
+  if err != nil{
+    panic("Error creating migrations" )
+  }
+  //}
 
-    currencyController := controllers.CurrencyController{Db: db}
-    transactionController := controllers.TransactionController{Db: db}
+  if os.Getenv("RUNAPP") == "false"{
+    return
+  }
 
-    app := wails.CreateApp(&wails.AppConfig{
-        Width:  1024,
-        Height: 500,
-        JS: js,
-        CSS: css,
-        Title:  "wallet",
-        Colour: "#131313",
-    })
+  currencyController := controllers.CurrencyController{Db: db}
+  transactionController := controllers.TransactionController{Db: db}
 
+  //currencies, _ :=currencyController.GetAll()
+  //cur := currencies[ 0 ]
+  //cur.USDChange = 10.2
+  //currencyController.Update(map[string]interface{}{
+  //  "usd_change": cur.USDChange,
+  //  "balance": cur.USDChange,
+  //  "ID": cur.ID,
+  //})
 
-    app.Bind(&currencyController)
-    app.Bind(&transactionController)
-
-    err = app.Run()
-    if err != nil{
-        panic("Error running application" )
-    }
+  app := wails.CreateApp(&wails.AppConfig{
+    Width: 1000,
+    Title:  "wallet",
+    JS:     js,
+    CSS:    css,
+    Resizable: true,
+    Colour: "#131313",
+    MinWidth: 500,
+    MinHeight: 400,
+  })
+  app.Bind(basic)
+  app.Bind(&currencyController)
+  app.Bind(&transactionController)
+  app.Run()
 }

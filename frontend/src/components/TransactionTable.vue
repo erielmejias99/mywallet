@@ -25,6 +25,9 @@
         </v-date-picker>
 
       </v-menu>
+      <v-btn icon @click="loadTransactions">
+        <v-icon>mdi-reload</v-icon>
+      </v-btn>
 
     </v-toolbar>
     <v-toolbar dense flat>
@@ -33,7 +36,7 @@
         color="purple"
         pill
         class="white--text"
-        v-for="currency of $store.getters.getCurrencies"
+        v-for="currency of currencies"
         :key="currency.ID"
         @click="search=currency.name"
         >
@@ -87,8 +90,7 @@
       </template>
 
       <template #item.amount="{item}">
-        {{ ( parseFloat( item.amount ) / 100.0).toFixed(2) }}
-        <b>{{$store.getters.getCurrencyFromId(item.currency_id).name}}</b>
+        {{ ( parseFloat( item.amount ) / 100.0 ).toFixed( 2 ) }}
       </template>
 
     </v-data-table>
@@ -103,6 +105,7 @@ export default {
     err: null,
     search: null,
     date_filter: null,
+    currencies: [],
     headers:[
       {
         text: 'Id',
@@ -125,7 +128,7 @@ export default {
         value: "CreatedAt"
       }
     ],
-    total_by_currency: new Map()
+    total_by_currency: new Map(),
   }),
   props:{
     currency_id:{
@@ -135,9 +138,15 @@ export default {
     }
   },
   methods:{
+    addTransaction: function(trans){
+      this.transactions.unshift( trans );
+    },
     getGeneralDate: function( date_string ){
       let d = new Date(date_string);
       return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+    },
+    getCurrencyFromId: function( id ){
+      return this.currencies.find( thing => thing.ID === id );
     },
     loadTransactions: function loadTransactions(){
       this.loading = true;
@@ -161,19 +170,25 @@ export default {
     date_filter: function(newVal){
       this.search = newVal;
     },
+    getCurrencyFromId: function( id ){
+      return this.currencies.find( thing => thing.ID === id );
+    },
     search: function(){
       this.total_by_currency.clear()
       let filtered = this.filterTransactions;
       // fil the map which calculates the total amount by currency on current filter
       for( let item of filtered ){
-        let currency_name = this.$store.getters.getCurrencyFromId(item.currency_id).name
-        if( this.total_by_currency.has( currency_name )){
-          this.total_by_currency.set(
-              currency_name,
-              this.total_by_currency.get( currency_name ) + parseFloat( item.amount )
-          );
-        }else{
-          this.total_by_currency.set( currency_name, parseFloat( item.amount ) );
+        let currency= this.getCurrencyFromId(item.currency_id);
+        if( currency !== undefined ){
+          let currency_name = currency['name'];
+          if( this.total_by_currency.has( currency_name )){
+            this.total_by_currency.set(
+                currency_name,
+                this.total_by_currency.get( currency_name ) + parseFloat( item.amount )
+            );
+          }else{
+            this.total_by_currency.set( currency_name, parseFloat( item.amount ) );
+          }
         }
       }
     }
@@ -188,7 +203,7 @@ export default {
             item.reason.toString().indexOf(this.search) !== -1 ||
             item.description.toString().indexOf(this.search) !== -1 ||
             item.CreatedAt.toString().indexOf(this.search) !== -1 ||
-            this.$store.getters.getCurrencyFromId(item.currency_id).name === this.search
+            this.getCurrencyFromId(item.currency_id) !== undefined ? this.getCurrencyFromId(item.currency_id)['name']=== this.search : false
         ));
       }
       return this.transactions;
@@ -196,6 +211,9 @@ export default {
   },
   mounted() {
     this.loadTransactions();
+    window.backend.CurrencyController.GetAll().then( resp =>{
+      this.currencies = resp;
+    });
   }
 }
 </script>
